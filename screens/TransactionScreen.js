@@ -19,7 +19,10 @@ export default class TransactionScreen extends React.Component{
         this.setState({
         /*status==='granted' is true when the user grants the permission
         status ==='granted' is false if user does not grant permission*/
-        hasCameraPermissions:status==='granted' })
+        hasCameraPermissions:status==='granted',
+        buttonState: 'clicked',
+        scanned: false
+     })
     }
 
     handleBarCodeScanned = async({type,data})=>{
@@ -36,20 +39,22 @@ export default class TransactionScreen extends React.Component{
         const scanned = this.state.scanned;
         const buttonState = this.state.buttonState;
 
-        if(buttonState ==='clicked' & hasCameraPermissions){
+        if(buttonState ==='clicked' && hasCameraPermissions){
             return(
                 <BarCodeScanner 
-                onBarCodeScanned = {scanned? undefined : this.handleBarCodeScanned}
+                onBarCodeScanned = {scanned ? undefined : this.handleBarCodeScanned}
+                style={StyleSheet.absoluteFillObject}
                 />
+
             )
         }
-        else if(buttonState)
+        else if(buttonState == 'normal')
                 return(
             <View style={styles.container}>
                 <Text style={styles.displayText}>{
                 hasCameraPermissions===true ? this.state.scannedData:'Request Camera Permission'
                 }</Text>
-                <TouchableOpacity style={styles.scanutton}
+                <TouchableOpacity style={styles.scanButton}
                 onPress = {this.getCameraPermissions}>
                 <Text>Scan QR Code</Text>
                 </TouchableOpacity>
